@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "title": "Fix login page bug",
+    "status": "todo",
+    "priority": 5,
+    "created_date": "2024-01-15",
+    "description": "Users cannot log in with special characters in password",
+    "assignee": "john.doe",
+    "due_date": "2024-01-20",
+    "tags": ["bug", "urgent", "frontend"]
+  },
+  {
+    "id": 2,
+    "title": "Implement user dashboard",
+    "status": "in-progress",
+    "priority": 4,
+    "created_date": "2024-01-10",
+    "description": "Create personalized dashboard for user metrics",
+    "assignee": "jane.smith",
+    "due_date": "2024-01-25",
+    "tags": ["feature", "frontend", "ui"]
+  },
+  {
+    "id": 3,
+    "title": "Database performance optimization",
+    "status": "todo",
+    "priority": 3,
+    "created_date": "2024-01-12",
+    "description": "Optimize slow queries in user table",
+    "assignee": "mike.johnson",
+    "due_date": "2024-01-30",
+    "tags": ["performance", "backend"]
+  },
+  {
+    "id": 4,
+    "title": "Write API documentation",
+    "status": "in-progress",
+    "priority": 2,
+    "created_date": "2024-01-08",
+    "description": "Document REST API endpoints for v2.0",
+    "assignee": "sarah.wilson",
+    "due_date": "2024-02-05",
+    "tags": ["documentation", "api"]
+  },
+  {
+    "id": 5,
+    "title": "Security audit",
+    "status": "todo",
+    "priority": 5,
+    "created_date": "2024-01-14",
+    "description": "Conduct security review of authentication system",
+    "assignee": "alex.brown",
+    "due_date": "2024-01-22",
+    "tags": ["security", "audit", "critical"]
+  },
+  {
+    "id": 6,
+    "title": "Mobile app testing",
+    "status": "done",
+    "priority": 3,
+    "created_date": "2024-01-05",
+    "description": "Test mobile app on various devices",
+    "assignee": "emma.davis",
+    "due_date": "2024-01-18",
+    "tags": ["testing", "mobile", "qa"]
+  },
+  {
+    "id": 7,
+    "title": "Update deployment pipeline",
+    "status": "todo",
+    "priority": 4,
+    "created_date": "2024-01-16",
+    "description": "Modernize CI/CD pipeline with new tools",
+    "assignee": "chris.miller",
+    "due_date": "2024-01-28",
+    "tags": ["devops", "deployment"]
+  },
+  {
+    "id": 8,
+    "title": "Customer feedback analysis",
+    "status": "in-progress",
+    "priority": 2,
+    "created_date": "2024-01-09",
+    "description": "Analyze Q4 customer feedback survey",
+    "assignee": "lisa.garcia",
+    "due_date": "2024-01-31",
+    "tags": ["analytics", "customer"]
+  },
+  {
+    "id": 9,
+    "title": "Fix memory leak in worker process",
+    "status": "done",
+    "priority": 5,
+    "created_date": "2024-01-07",
+    "description": "Resolve memory leak causing server crashes",
+    "assignee": "tom.anderson",
+    "due_date": "2024-01-17",
+    "tags": ["bug", "critical", "backend"]
+  },
+  {
+    "id": 10,
+    "title": "Design new logo",
+    "status": "todo",
+    "priority": 1,
+    "created_date": "2024-01-13",
+    "description": "Create modern logo for rebrand initiative",
+    "assignee": "sophia.lee",
+    "due_date": "2024-02-10",
+    "tags": ["design", "branding"]
+  },
+  {
+    "id": 11,
+    "title": "Implement dark mode",
+    "status": "in-progress",
+    "priority": 3,
+    "created_date": "2024-01-11",
+    "description": "Add dark mode support to web application",
+    "assignee": "david.martin",
+    "due_date": "2024-02-01",
+    "tags": ["feature", "ui", "accessibility"]
+  },
+  {
+    "id": 12,
+    "title": "Code review automation",
+    "status": "done",
+    "priority": 2,
+    "created_date": "2024-01-06",
+    "description": "Set up automated code review tools",
+    "assignee": "rachel.taylor",
+    "due_date": "2024-01-19",
+    "tags": ["automation", "quality"]
+  },
+  {
+    "id": 13,
+    "title": "Load testing",
+    "status": "todo",
+    "priority": 4,
+    "created_date": "2024-01-17",
+    "description": "Perform load testing on new API endpoints",
+    "assignee": "kevin.white",
+    "due_date": "2024-01-26",
+    "tags": ["testing", "performance", "api"]
+  },
+  {
+    "id": 14,
+    "title": "Backup system upgrade",
+    "status": "in-progress",
+    "priority": 3,
+    "created_date": "2024-01-14",
+    "description": "Upgrade backup system to new infrastructure",
+    "assignee": "nicole.thomas",
+    "due_date": "2024-02-03",
+    "tags": ["infrastructure", "backup"]
+  },
+  {
+    "id": 15,
+    "title": "User onboarding flow",
+    "status": "todo",
+    "priority": 4,
+    "created_date": "2024-01-18",
+    "description": "Redesign user onboarding experience",
+    "assignee": "brandon.clark",
+    "due_date": "2024-02-08",
+    "tags": ["ux", "frontend", "feature"]
+  },
+  {
+    "id": 16,
+    "title": "Database migration",
+    "status": "done",
+    "priority": 5,
+    "created_date": "2024-01-04",
+    "description": "Migrate legacy data to new schema",
+    "assignee": "michelle.lewis",
+    "due_date": "2024-01-16",
+    "tags": ["database", "migration", "critical"]
+  },
+  {
+    "id": 17,
+    "title": "Email notification system",
+    "status": "todo",
+    "priority": 2,
+    "created_date": "2024-01-19",
+    "description": "Implement email notifications for task updates",
+    "assignee": "ryan.walker",
+    "due_date": "2024-02-12",
+    "tags": ["feature", "notifications"]
+  },
+  {
+    "id": 18,
+    "title": "Performance monitoring",
+    "status": "in-progress",
+    "priority": 3,
+    "created_date": "2024-01-13",
+    "description": "Set up application performance monitoring",
+    "assignee": "jennifer.hall",
+    "due_date": "2024-01-29",
+    "tags": ["monitoring", "devops"]
+  },
+  {
+    "id": 19,
+    "title": "Accessibility improvements",
+    "status": "todo",
+    "priority": 2,
+    "created_date": "2024-01-20",
+    "description": "Improve WCAG compliance across application",
+    "assignee": "daniel.young",
+    "due_date": "2024-02-15",
+    "tags": ["accessibility", "compliance"]
+  },
+  {
+    "id": 20,
+    "title": "Bug triage meeting",
+    "status": "done",
+    "priority": 1,
+    "created_date": "2024-01-12",
+    "description": "Weekly bug triage and prioritization meeting",
+    "assignee": "team.lead",
+    "due_date": "2024-01-12",
+    "tags": ["meeting", "planning"]
+  }
+]

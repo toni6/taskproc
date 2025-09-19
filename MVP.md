@@ -211,11 +211,14 @@ taskproc/
 │   │   ├── parser.hpp
 │   │   └── parser.cpp
 │   ├── core/
+│   │   ├── data_manager.hpp (File loading, state management & reader coordination)
+│   │   ├── data_manager.cpp
 │   │   ├── task.hpp
 │   │   ├── task.cpp
-│   │   ├── database.hpp
+│   │   ├── database.hpp (Query/filter/sort operations)
 │   │   └── database.cpp
 │   ├── io/
+│   │   ├── reader.hpp (ITaskReader interface)
 │   │   ├── csv_reader.hpp
 │   │   ├── csv_reader.cpp
 │   │   ├── json_reader.hpp

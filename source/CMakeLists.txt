@@ -22,7 +22,21 @@ endif()
 
 # Create a library with business logic
 add_library(taskproc_lib STATIC
+    # CLI files
+    cli/parser.hpp
     cli/parser.cpp
+
+    # Core files
+    core/task.hpp
+    core/data_manager.hpp
+    core/data_manager.cpp
+
+    # IO files
+    io/reader.hpp
+    io/csv_reader.hpp
+    io/csv_reader.cpp
+    io/json_reader.hpp
+    io/json_reader.cpp
 )
 
 target_include_directories(taskproc_lib PUBLIC
