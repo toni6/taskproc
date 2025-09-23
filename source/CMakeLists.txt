@@ -6,7 +6,7 @@ project(taskproc
     LANGUAGES CXX)
 
 # Set C++ standard
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -19,6 +19,18 @@ if(MSVC)
 else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
+
+# Fetch fast-cpp-csv-parser (header-only)
+include(FetchContent)
+
+FetchContent_Declare(
+    fastcsv
+    GIT_REPOSITORY https://github.com/ben-strasser/fast-cpp-csv-parser.git
+    GIT_TAG        master
+    GIT_SHALLOW    ON
+)
+
+FetchContent_MakeAvailable(fastcsv)
 
 # Create a library with business logic
 add_library(taskproc_lib STATIC
@@ -41,6 +53,11 @@ add_library(taskproc_lib STATIC
 
 target_include_directories(taskproc_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# Expose the downloaded fastcsv headers to taskproc_lib
+target_include_directories(taskproc_lib PRIVATE
+    ${fastcsv_SOURCE_DIR}
 )
 
 # Main executable

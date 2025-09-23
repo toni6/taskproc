@@ -16,5 +16,5 @@ public:
 
 private:
   void registerReaders();
-  ITaskReader *selectReader(const std::string &filename);
+  ITaskReader *selectReader(const std::string &filename) const;
 };

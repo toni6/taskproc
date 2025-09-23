@@ -3,6 +3,7 @@
 # Create test executable
 add_executable(taskproc_tests
     test_parser.cpp
+    test_csv_reader.cpp
 )
 
 # Link against Catch2

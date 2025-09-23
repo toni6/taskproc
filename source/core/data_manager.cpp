@@ -28,7 +28,7 @@ bool DataManager::loadFromFile(const std::string &filepath) {
   return false;
 }
 
-ITaskReader *DataManager::selectReader(const std::string &filepath) {
+ITaskReader *DataManager::selectReader(const std::string &filepath) const {
   for (auto &reader : readers_) {
     if (reader->canHandle(filepath)) {
       return reader.get();

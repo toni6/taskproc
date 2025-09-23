@@ -16,6 +16,9 @@ id,title,status,priority,created_date,description,assignee,due_date,tags
 15,"User onboarding flow","todo",4,"2024-01-18","Redesign user onboarding experience","brandon.clark","2024-02-08","ux,frontend,feature"
 16,"Database migration","done",5,"2024-01-04","Migrate legacy data to new schema","michelle.lewis","2024-01-16","database,migration,critical"
 17,"Email notification system","todo",2,"2024-01-19","Implement email notifications for task updates","ryan.walker","2024-02-12","feature,notifications"
-18,"Performance monitoring","in-progress",3,"2024-01-13","Set up application performance monitoring","jennifer.hall","2024-01-29","monitoring,devops"
+,"Performance monitoring","in-progress",3,"2024-01-13","Set up application performance monitoring","jennifer.hall","2024-01-29","monitoring,devops"
 19,"Accessibility improvements","todo",2,"2024-01-20","Improve WCAG compliance across application","daniel.young","2024-02-15","accessibility,compliance"
 20,"Bug triage meeting","done",1,"2024-01-12","Weekly bug triage and prioritization meeting","team.lead","2024-01-12","meeting,planning"
+21,"Feature flag management","todo",,"2024-01-22","Implement feature flag management system","alex.johnson","2024-02-05","feature,devops"
+22, "Code review automation", "todo",,,,,,
+23, "User authentication",,,,,,,

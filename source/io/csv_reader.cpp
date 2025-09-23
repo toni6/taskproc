@@ -1,29 +1,61 @@
 #include "io/csv_reader.hpp"
 #include "core/task.hpp"
-#include <fstream>
+#include <csv.h>
+#include <iostream>
 #include <sstream>
+#include <string>
 #include <vector>
 
 bool CSVReader::canHandle(const std::string &filepath) const {
   return filepath.ends_with(".csv");
 }
 
+std::vector<std::string> split_tags(const std::string &tags_field) {
+  std::vector<std::string> tags;
+  std::string tag;
+  std::istringstream iss(tags_field);
+  while (std::getline(iss, tag, ',')) {
+    tags.push_back(tag);
+  }
+  return tags;
+}
+
 std::vector<Task> CSVReader::readTasks(const std::string &filepath) {
-  std::ifstream file(filepath);
-  std::string line;
+  // Enable trimming and double-quote escaping (comma separator, double-quote as
+  // quote char) Template parameters: column count, trim policy, quote policy
+  io::CSVReader<9, io::trim_chars<' ', '\t'>,
+                io::double_quote_escape<',', '\"'>>
+      in(filepath);
+  in.read_header(io::ignore_extra_column, "id", "title", "status", "priority",
+                 "description", "assignee", "due_date", "created_date", "tags");
+
   std::vector<Task> tasks;
+  tasks.reserve(128);
 
-  while (std::getline(file, line)) {
-    std::istringstream iss(line);
-    std::string id, title;
+  // Variables for row data
+  int id;
+  std::string title, status;
+  int priority;
+  std::string description, due_date, assignee, created_date, tags_field;
 
-    if (!(iss >> id >> title)) {
+  while (in.read_row(id, title, status, priority, description, assignee,
+                     due_date, created_date, tags_field)) {
+    if (id < 1) {
+      std::cerr << "Error while processing task: Invalid ID, must be greater "
+                   "than 0\n";
       continue;
     }
+    if (title.empty() || status.empty()) {
+      std::cerr << "Error while processing task: Invalid title or status\n";
+      continue;
+    }
+    if (priority < 1) {
+      priority = 1;
+      std::cout << "Task " << id << ": Invalid priority, set it to 1\n";
+    }
 
-    int id_int = std::stoi(id);
-    tasks.emplace_back(id_int, title);
+    tasks.emplace_back(id, title, status, priority, created_date, description,
+                       assignee, due_date, split_tags(tags_field));
   }
-
   return tasks;
 }
