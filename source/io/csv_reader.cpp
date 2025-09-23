@@ -6,9 +6,7 @@
 #include <string>
 #include <vector>
 
-bool CSVReader::canHandle(const std::string &filepath) const {
-  return filepath.ends_with(".csv");
-}
+bool CSVReader::canHandle(const std::string &filepath) const { return filepath.ends_with(".csv"); }
 
 std::vector<std::string> split_tags(const std::string &tags_field) {
   std::vector<std::string> tags;
@@ -23,11 +21,17 @@ std::vector<std::string> split_tags(const std::string &tags_field) {
 std::vector<Task> CSVReader::readTasks(const std::string &filepath) {
   // Enable trimming and double-quote escaping (comma separator, double-quote as
   // quote char) Template parameters: column count, trim policy, quote policy
-  io::CSVReader<9, io::trim_chars<' ', '\t'>,
-                io::double_quote_escape<',', '\"'>>
-      in(filepath);
-  in.read_header(io::ignore_extra_column, "id", "title", "status", "priority",
-                 "description", "assignee", "due_date", "created_date", "tags");
+  io::CSVReader<9, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '\"'>> in(filepath);
+  in.read_header(io::ignore_extra_column,
+                 "id",
+                 "title",
+                 "status",
+                 "priority",
+                 "description",
+                 "assignee",
+                 "due_date",
+                 "created_date",
+                 "tags");
 
   std::vector<Task> tasks;
   tasks.reserve(128);
@@ -38,8 +42,7 @@ std::vector<Task> CSVReader::readTasks(const std::string &filepath) {
   int priority;
   std::string description, due_date, assignee, created_date, tags_field;
 
-  while (in.read_row(id, title, status, priority, description, assignee,
-                     due_date, created_date, tags_field)) {
+  while (in.read_row(id, title, status, priority, description, assignee, due_date, created_date, tags_field)) {
     if (id < 1) {
       std::cerr << "Error while processing task: Invalid ID, must be greater "
                    "than 0\n";
@@ -54,8 +57,8 @@ std::vector<Task> CSVReader::readTasks(const std::string &filepath) {
       std::cout << "Task " << id << ": Invalid priority, set it to 1\n";
     }
 
-    tasks.emplace_back(id, title, status, priority, created_date, description,
-                       assignee, due_date, split_tags(tags_field));
+    tasks.emplace_back(
+        id, title, status, priority, created_date, description, assignee, due_date, split_tags(tags_field));
   }
   return tasks;
 }

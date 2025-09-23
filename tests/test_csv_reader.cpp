@@ -18,16 +18,10 @@ TEST_CASE("CSVReader::readTasks parses file and tags", "[io][csv_reader]") {
   {
     std::ofstream ofs(tmp);
     REQUIRE(ofs.is_open());
-    ofs << "id,title,status,priority,description,assignee,due_date,created_"
-           "date,tags\n";
-    ofs << "1,\"Fix "
-           "login\",\"todo\",5,\"desc\",\"john\",\"2024-01-20\",\"2024-01-15\","
-           "\"bug,urgent,frontend\"\n";
-    ofs << "2,\"Single "
-           "tag\",\"done\",1,\"desc2\",\"jane\",\"2024-01-22\",\"2024-01-10\","
-           "\"tag1\"\n";
-    ofs << "3,\"NoPriorityNoTags\",\"done\",,\"desc3\",\"jane\",\"2024-01-23\","
-           "\"2025-01-10\",\n";
+    ofs << "id,title,status,priority,description,assignee,due_date,created_date,tags\n";
+    ofs << "1,\"Fix login\",\"todo\",5,\"desc\",\"john\",\"2024-01-20\",\"2024-01-15\",\"bug,urgent,frontend\"\n";
+    ofs << "2,\"Single tag\",\"done\",1,\"desc2\",\"jane\",\"2024-01-22\",\"2024-01-10\",\"tag1\"\n";
+    ofs << "3,\"NoPriorityNoTags\",\"done\",,\"desc3\",\"jane\",\"2024-01-23\",\"2025-01-10\",\n";
     ofs << "4,\"Invalid\",,,\"desc4\",\"jane\",\"2024-01-23\",\"2025-01-10\",\n";
     ofs << ",\"Invalid\",1,,\"desc5\",\"jane\",\"2024-01-23\",\"2025-01-10\",\n";
   }

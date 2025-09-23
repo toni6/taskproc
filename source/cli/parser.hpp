@@ -9,9 +9,7 @@ struct ParsedArgs {
   std::vector<std::string> args;
   std::string error_message;
 
-  bool is_valid() const {
-    return command != Command::Unknown && error_message.empty();
-  }
+  bool is_valid() const { return command != Command::Unknown && error_message.empty(); }
 };
 
 class CommandParser {

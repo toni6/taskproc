@@ -7,42 +7,41 @@ ParsedArgs CommandParser::parse(int argc, char *argv[]) {
 
   // Need at least program name + command
   if (argc < 2) {
-      result.command = Command::Help;
-      return result;
+    result.command = Command::Help;
+    return result;
   }
 
   std::string command = argv[1];
   result.command = string_to_command(command);
 
   if (result.command == Command::Unknown) {
-      result.error_message = "Unknown command: " + command;
-      return result;
+    result.error_message = "Unknown command: " + command;
+    return result;
   }
 
   // Collecting remaining arguments
   for (int i = 2; i < argc; ++i) {
-      result.args.emplace_back(argv[i]);
+    result.args.emplace_back(argv[i]);
   }
 
   // Validate argument count for each command
   switch (result.command) {
-      case Command::Load:
-          if (result.args.empty()) {
-              result.error_message = "command 'load' requires a filename";
-          }
-          break;
+  case Command::Load:
+    if (result.args.empty()) {
+      result.error_message = "command 'load' requires a filename";
+    }
+    break;
 
-      // Commands that don't require arguments
-      case Command::Help:
-      case Command::Reload:
-      case Command::Clear:
-      case Command::Status:
-      case Command::List:
-          break;
+  // Commands that don't require arguments
+  case Command::Help:
+  case Command::Reload:
+  case Command::Clear:
+  case Command::Status:
+  case Command::List:
+    break;
 
-      case Command::Unknown:
-          break; // Already handled above
-
+  case Command::Unknown:
+    break; // Already handled above
   }
 
   return result;

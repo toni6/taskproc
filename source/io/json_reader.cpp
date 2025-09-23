@@ -4,9 +4,7 @@
 #include <sstream>
 #include <vector>
 
-bool JSONReader::canHandle(const std::string &filepath) const {
-  return filepath.ends_with(".json");
-}
+bool JSONReader::canHandle(const std::string &filepath) const { return filepath.ends_with(".json"); }
 
 // TODO: Replace with JSON parsing logic
 std::vector<Task> JSONReader::readTasks(const std::string &filepath) {
