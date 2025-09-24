@@ -14,7 +14,7 @@
  * - `tags` is returned as a single field; callers should expect a comma-
  *   separated tag string in that field (the reader does not split tags for you).
  *
- * @copydoc ITaskReader::readTasks
+ * @copydoc ITaskReader::read_tasks
  *
  * Error and format-specific behavior:
  * - @throws io::error::can_not_open_file if the file cannot be opened.
@@ -25,6 +25,6 @@
  */
 class CSVReader : public ITaskReader {
 public:
-  bool canHandle(const std::string &filepath) const override;
-  std::vector<Task> readTasks(const std::string &filepath) override;
+  bool can_handle(const std::string &filepath) const override;
+  std::vector<Task> read_tasks(const std::string &filepath) override;
 };

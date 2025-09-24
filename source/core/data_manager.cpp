@@ -3,15 +3,15 @@
 #include "io/json_reader.hpp"
 #include <iostream>
 
-DataManager::DataManager() { registerReaders(); }
+DataManager::DataManager() { register_readers(); }
 
-void DataManager::registerReaders() {
+void DataManager::register_readers() {
   readers_.emplace_back(std::make_unique<CSVReader>());
   readers_.emplace_back(std::make_unique<JSONReader>());
 }
 
-bool DataManager::loadFromFile(const std::string &filepath) {
-  ITaskReader *reader = selectReader(filepath);
+bool DataManager::load_from_file(const std::string &filepath) {
+  ITaskReader *reader = select_reader(filepath);
   if (!reader) {
     std::cerr << "No reader found for file: " << filepath << "\n";
     return false;
@@ -19,7 +19,7 @@ bool DataManager::loadFromFile(const std::string &filepath) {
 
   std::vector<Task> tasks;
   try {
-    tasks = reader->readTasks(filepath);
+    tasks = reader->read_tasks(filepath);
   } catch (const std::exception &e) {
     std::cerr << "Error reading file: " << filepath << "\n";
     std::cerr << e.what() << "\n";
@@ -42,24 +42,24 @@ bool DataManager::loadFromFile(const std::string &filepath) {
   return true;
 }
 
-ITaskReader *DataManager::selectReader(const std::string &filepath) const {
+ITaskReader *DataManager::select_reader(const std::string &filepath) const {
   for (auto &reader : readers_) {
-    if (reader->canHandle(filepath)) {
+    if (reader->can_handle(filepath)) {
       return reader.get();
     }
   }
   return nullptr;
 }
 
-bool DataManager::reloadTasks() {
+bool DataManager::reload_tasks() {
   // TOOD: the filepath must be stored (filesystem, db, ...) and obtained from the storage here
   if (current_filepath_.empty()) {
     std::cerr << "No file loaded\n";
     return false;
   }
-  return loadFromFile(current_filepath_);
+  return load_from_file(current_filepath_);
 }
 
-size_t DataManager::getTaskCount() const { return tasks_.size(); }
+size_t DataManager::task_count() const { return tasks_.size(); }
 
-std::string DataManager::getCurrentFilePath() const { return current_filepath_; }
+std::string DataManager::current_file_path() const { return current_filepath_; }

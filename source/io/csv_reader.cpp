@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-bool CSVReader::canHandle(const std::string &filepath) const { return filepath.ends_with(".csv"); }
+bool CSVReader::can_handle(const std::string &filepath) const { return filepath.ends_with(".csv"); }
 
 // Pre: `tags_field` is the raw tags string from CSV (no outer quotes), for example "tag1,tag2,tag3".
 // Post: returns vector of tag tokens. If `tags_field` is empty returns empty vector.
@@ -20,7 +20,7 @@ std::vector<std::string> split_tags(const std::string &tags_field) {
   return tags;
 }
 
-std::vector<Task> CSVReader::readTasks(const std::string &filepath) {
+std::vector<Task> CSVReader::read_tasks(const std::string &filepath) {
   // Enable trimming and double-quote escaping (comma separator, double-quote as
   // quote char) Template parameters: column count, trim policy, quote policy
   io::CSVReader<9, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '\"'>> in(filepath);

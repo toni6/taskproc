@@ -30,7 +30,7 @@ Template
 
 Examples
 
-1) DataManager::loadFromFile
+1) DataManager::load_from_file
 
 /**
  * @brief Load tasks from `filepath` and replace manager's tasks on success.

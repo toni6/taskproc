@@ -35,7 +35,7 @@ public:
    *
    * @post The moved-from object is left in a valid but unspecified state.
    * @post Any raw, non-owning pointers previously obtained from
-   *       `selectReader()` continue to point to the same underlying reader
+   *       `select_reader()` continue to point to the same underlying reader
    *       objects (the objects themselves are not destroyed by the move),
    *       but those objects are now owned by the moved-to DataManager.
    *       Callers holding non-owning pointers should not assume which
@@ -58,34 +58,34 @@ public:
    * @param filepath Path to the file to load.
    * @return true if the file was successfully loaded and parsed, false otherwise.
    */
-  bool loadFromFile(const std::string &filepath);
+  bool load_from_file(const std::string &filepath);
 
   /**
    * @brief Reload tasks from the currently loaded file.
    *
    * @pre A file was previously loaded successfully (i.e. `current_filepath_` is non-empty).
-   * @post On success: `tasks_` is updated with the loaded tasks (same semantics as loadFromFile).
+   * @post On success: `tasks_` is updated with the loaded tasks (same semantics as load_from_file).
    * @return true if the reload succeeded, false otherwise.
    */
-  bool reloadTasks();
+  bool reload_tasks();
 
   /**
    * @brief Get the number of tasks currently loaded.
    *
    * @return The number of tasks currently loaded.
    */
-  size_t getTaskCount() const;
+  size_t task_count() const;
 
   /**
    * @brief Get the path of the currently loaded file.
    *
    * @return The path of the currently loaded file, or an empty string if no file is loaded.
    */
-  std::string getCurrentFilePath() const;
+  std::string current_file_path() const;
 
 private:
   /// Register built-in readers (CSV, JSON, ...).
-  void registerReaders();
+  void register_readers();
 
   /**
    * @brief Select the appropriate reader for a given filename.
@@ -99,5 +99,5 @@ private:
    * @param filename The name of the file to select a reader for.
    * @return A pointer to the selected reader, or nullptr if no reader is available.
    */
-  ITaskReader *selectReader(const std::string &filename) const;
+  ITaskReader *select_reader(const std::string &filename) const;
 };

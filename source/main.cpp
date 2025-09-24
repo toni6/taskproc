@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
   switch (parsed.command) {
   case Command::Load: {
     cout << "Loading tasks from: " << parsed.args[0] << "\n";
-    bool result = data_manager.loadFromFile(parsed.args[0]);
+    bool result = data_manager.load_from_file(parsed.args[0]);
     if (!result) {
       cerr << "Failed to load tasks from file: " << parsed.args[0] << "\n";
       return 1;
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
   }
   case Command::Reload: {
     cout << "Reloading from last file\n";
-    bool result = data_manager.reloadTasks();
+    bool result = data_manager.reload_tasks();
     if (!result) {
       cerr << "Failed to reload tasks\n";
       return 1;

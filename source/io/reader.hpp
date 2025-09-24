@@ -24,12 +24,12 @@ public:
    * @param filepath Path to the input file.
    * @return Vector of parsed Task objects.
    */
-  virtual std::vector<Task> readTasks(const std::string &filepath) = 0;
+  virtual std::vector<Task> read_tasks(const std::string &filepath) = 0;
 
   /**
    * @brief Check whether this reader can handle `filepath` (e.g. by extension).
    * @pre `filepath` is a filename or path.
    * @post returns true if this reader recognizes the file format.
    */
-  virtual bool canHandle(const std::string &filepath) const = 0;
+  virtual bool can_handle(const std::string &filepath) const = 0;
 };

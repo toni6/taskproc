@@ -19,7 +19,7 @@ TEST_CASE("DataManager load and reload", "[core][data_manager]") {
   DataManager dm;
 
   // reload without load should fail
-  REQUIRE(!dm.reloadTasks());
+  REQUIRE(!dm.reload_tasks());
 
   SECTION("load and reload on same instance succeeds") {
     // Create a minimal CSV file the CSVReader can parse
@@ -33,15 +33,15 @@ TEST_CASE("DataManager load and reload", "[core][data_manager]") {
       ofs << "1,One,todo,1,desc,me,2025-01-01,2024-01-01,tag1\n";
     }
 
-    // loadFromFile should succeed (CSV reader exists)
-    REQUIRE(dm.loadFromFile(tmp_csv.string()));
-    REQUIRE(dm.getTaskCount() > 0);
-    REQUIRE(dm.getCurrentFilePath() == tmp_csv.string());
+    // load_from_file should succeed (CSV reader exists)
+    REQUIRE(dm.load_from_file(tmp_csv.string()));
+    REQUIRE(dm.task_count() > 0);
+    REQUIRE(dm.current_file_path() == tmp_csv.string());
 
-    // reloadTasks should succeed now (uses stored current_filepath_)
-    REQUIRE(dm.reloadTasks());
-    REQUIRE(dm.getTaskCount() > 0);
-    REQUIRE(dm.getCurrentFilePath() == tmp_csv.string());
+    // reload_tasks should succeed now (uses stored current_filepath_)
+    REQUIRE(dm.reload_tasks());
+    REQUIRE(dm.task_count() > 0);
+    REQUIRE(dm.current_file_path() == tmp_csv.string());
   }
 
   SECTION("unsupported extension returns false") {
@@ -55,7 +55,7 @@ TEST_CASE("DataManager load and reload", "[core][data_manager]") {
       ofs << "garbage\n";
     }
 
-    REQUIRE(!dm.loadFromFile(tmp_unknown.string()));
+    REQUIRE(!dm.load_from_file(tmp_unknown.string()));
   }
 
   SECTION("DataManager reload across instances (simulates separate processes)") {
@@ -73,19 +73,19 @@ TEST_CASE("DataManager load and reload", "[core][data_manager]") {
         ofs << "1,One,todo,1,desc,me,2025-01-01,2024-01-01,tag1\n";
       }
 
-      REQUIRE(dm_first.loadFromFile(tmp_csv.string()));
-      REQUIRE(dm_first.reloadTasks());
+      REQUIRE(dm_first.load_from_file(tmp_csv.string()));
+      REQUIRE(dm_first.reload_tasks());
     } // dm_first is destroyed here
 
     // New DataManager instance must obtain filepath from storage
     DataManager dm_new;
-    REQUIRE(dm_new.reloadTasks());
+    REQUIRE(dm_new.reload_tasks());
   }
 }
 
 // Verify DataManager accessors reflect empty state before any load
 TEST_CASE("DataManager accessors when empty", "[core][data_manager]") {
   DataManager dm_empty;
-  REQUIRE(dm_empty.getTaskCount() == 0);
-  REQUIRE(dm_empty.getCurrentFilePath().empty());
+  REQUIRE(dm_empty.task_count() == 0);
+  REQUIRE(dm_empty.current_file_path().empty());
 }

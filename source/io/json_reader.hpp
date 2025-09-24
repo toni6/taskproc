@@ -7,10 +7,10 @@
 /**
  * @brief JSONReader is a class that reads tasks from a JSON file.
  *
- * TODO Implement the readTasks method to read tasks from a JSON file with an appropriate JSON parser.
+ * TODO Implement the read_tasks method to read tasks from a JSON file with an appropriate JSON parser.
  */
 class JSONReader : public ITaskReader {
 public:
-  bool canHandle(const std::string &filepath) const override;
-  std::vector<Task> readTasks(const std::string &filepath) override;
+  bool can_handle(const std::string &filepath) const override;
+  std::vector<Task> read_tasks(const std::string &filepath) override;
 };

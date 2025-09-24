@@ -6,16 +6,16 @@
 #include <fstream>
 #include <string>
 
-// Verify CVSReader::canHandle
-TEST_CASE("CSVReader::canHandle checks", "[io][csv_reader]") {
+// Verify CVSReader::can_handle
+TEST_CASE("CSVReader::can_handle checks", "[io][csv_reader]") {
   CSVReader reader;
-  REQUIRE(reader.canHandle("test.csv"));
-  REQUIRE(!reader.canHandle("test.txt"));
-  REQUIRE(!reader.canHandle("test.json"));
+  REQUIRE(reader.can_handle("test.csv"));
+  REQUIRE(!reader.can_handle("test.txt"));
+  REQUIRE(!reader.can_handle("test.json"));
 }
 
-// Verify CSVReader::readTasks parses file and tags
-TEST_CASE("CSVReader::readTasks parses file and tags", "[io][csv_reader]") {
+// Verify CSVReader::read_tasks parses file and tags
+TEST_CASE("CSVReader::read_tasks parses file and tags", "[io][csv_reader]") {
   using namespace std::string_literals;
 
   // Create a unique temporary filename in the system temp dir
@@ -37,7 +37,7 @@ TEST_CASE("CSVReader::readTasks parses file and tags", "[io][csv_reader]") {
 
   // Read using CSVReader
   CSVReader reader;
-  auto tasks = reader.readTasks(tmp.string());
+  auto tasks = reader.read_tasks(tmp.string());
 
   // Basic checks
   REQUIRE(tasks.size() == 3);
