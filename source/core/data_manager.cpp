@@ -17,7 +17,7 @@ bool DataManager::load_from_file(const std::string &filepath) {
     return false;
   }
 
-  std::vector<Task> tasks;
+  std::vector<Task> tasks{};
   try {
     tasks = reader->read_tasks(filepath);
   } catch (const std::exception &e) {
