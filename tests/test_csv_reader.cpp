@@ -6,6 +6,15 @@
 #include <fstream>
 #include <string>
 
+// Verify CVSReader::canHandle
+TEST_CASE("CSVReader::canHandle checks", "[io][csv_reader]") {
+  CSVReader reader;
+  REQUIRE(reader.canHandle("test.csv"));
+  REQUIRE(!reader.canHandle("test.txt"));
+  REQUIRE(!reader.canHandle("test.json"));
+}
+
+// Verify CSVReader::readTasks parses file and tags
 TEST_CASE("CSVReader::readTasks parses file and tags", "[io][csv_reader]") {
   using namespace std::string_literals;
 

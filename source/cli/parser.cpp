@@ -70,6 +70,7 @@ void CommandParser::print_help(const std::string &program_name) {
   std::cout << "Commands:\n";
   std::cout << "  help            Display this help message\n";
   std::cout << "  load <file>     Load tasks from a file\n\n";
+  std::cout << "  reload          Reload tasks from the last loaded file\n";
 
   std::cout << "Examples:\n";
   std::cout << "  " << program_name << " load tasks.csv\n";

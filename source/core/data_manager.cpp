@@ -10,14 +10,6 @@ void DataManager::registerReaders() {
   readers_.emplace_back(std::make_unique<JSONReader>());
 }
 
-/*
- * Load tasks from a file using the appropriate reader.
- *
- * We swap the tasks map with the loaded tasks to guarantee the tasks are fully
- * loaded and replaced or, in case of failure, unchanged.
- *
- * Returns true if the file was successfully loaded and parsed, false otherwise.
- */
 bool DataManager::loadFromFile(const std::string &filepath) {
   ITaskReader *reader = selectReader(filepath);
   if (!reader) {
@@ -45,6 +37,7 @@ bool DataManager::loadFromFile(const std::string &filepath) {
   }
 
   tasks_.swap(tasks_map);
+  // TODO: store the filepath in a storage (filesystem, db, ...)
   current_filepath_ = filepath;
   return true;
 }
@@ -57,3 +50,16 @@ ITaskReader *DataManager::selectReader(const std::string &filepath) const {
   }
   return nullptr;
 }
+
+bool DataManager::reloadTasks() {
+  // TOOD: the filepath must be stored (filesystem, db, ...) and obtained from the storage here
+  if (current_filepath_.empty()) {
+    std::cerr << "No file loaded\n";
+    return false;
+  }
+  return loadFromFile(current_filepath_);
+}
+
+size_t DataManager::getTaskCount() const { return tasks_.size(); }
+
+std::string DataManager::getCurrentFilePath() const { return current_filepath_; }

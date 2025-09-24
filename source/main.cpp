@@ -38,10 +38,17 @@ int main(int argc, char *argv[]) {
     }
     break;
   }
-  case Command::Reload:
+  case Command::Reload: {
     cout << "Reloading from last file\n";
-    // TODO: Implement reload command handler
+    bool result = data_manager.reloadTasks();
+    if (!result) {
+      cerr << "Failed to reload tasks\n";
+      return 1;
+    } else {
+      cout << "Tasks reloaded successfully\n";
+    }
     break;
+  }
   case Command::Status:
     cout << "Current dataset status:\n";
     // TOOD: Implement status command handler

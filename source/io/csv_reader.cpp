@@ -8,12 +8,14 @@
 
 bool CSVReader::canHandle(const std::string &filepath) const { return filepath.ends_with(".csv"); }
 
+// Pre: `tags_field` is the raw tags string from CSV (no outer quotes), for example "tag1,tag2,tag3".
+// Post: returns vector of tag tokens. If `tags_field` is empty returns empty vector.
 std::vector<std::string> split_tags(const std::string &tags_field) {
   std::vector<std::string> tags;
   std::string tag;
   std::istringstream iss(tags_field);
   while (std::getline(iss, tag, ',')) {
-    tags.push_back(tag);
+    tags.emplace_back(std::move(tag));
   }
   return tags;
 }

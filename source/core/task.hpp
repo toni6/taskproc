@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+/// Represents a task with various attributes.
 struct Task {
   int id;
   std::string title;
