@@ -79,6 +79,6 @@ if(BUILD_TESTING)
     # Find Catch2 (system installation)
     find_package(Catch2 3 REQUIRED)
 
-    # Add tests subdirectory
+    # Add tests directory ~/tests
     add_subdirectory(../tests tests)
 endif()

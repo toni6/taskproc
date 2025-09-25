@@ -12,6 +12,8 @@ TEST_CASE("CSVReader::can_handle checks", "[io][csv_reader]") {
   REQUIRE(reader.can_handle("test.csv"));
   REQUIRE(!reader.can_handle("test.txt"));
   REQUIRE(!reader.can_handle("test.json"));
+  REQUIRE(!reader.can_handle("test.csv.gz"));
+  REQUIRE(!reader.can_handle("test.csv.bak"));
 }
 
 // Verify CSVReader::read_tasks parses file and tags

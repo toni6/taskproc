@@ -29,10 +29,10 @@ std::vector<Task> CSVReader::read_tasks(const std::string &filepath) {
                  "title",
                  "status",
                  "priority",
+                 "created_date",
                  "description",
                  "assignee",
                  "due_date",
-                 "created_date",
                  "tags");
 
   std::vector<Task> tasks;
@@ -42,9 +42,9 @@ std::vector<Task> CSVReader::read_tasks(const std::string &filepath) {
   int id;
   std::string title, status;
   int priority;
-  std::string description, due_date, assignee, created_date, tags_field;
+  std::string created_date, description, assignee, due_date, tags_field;
 
-  while (in.read_row(id, title, status, priority, description, assignee, due_date, created_date, tags_field)) {
+  while (in.read_row(id, title, status, priority, created_date, description, assignee, due_date, tags_field)) {
     if (id < 1) {
       std::cerr << "Error while processing task: Invalid ID, must be greater "
                    "than 0\n";
@@ -56,7 +56,7 @@ std::vector<Task> CSVReader::read_tasks(const std::string &filepath) {
     }
     if (priority < 1) {
       priority = 1;
-      std::cout << "Task " << id << ": Invalid priority, set it to 1\n";
+      std::cerr << "Task " << id << ": Invalid priority, set it to 1\n";
     }
 
     tasks.emplace_back(

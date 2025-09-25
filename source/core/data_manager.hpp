@@ -74,14 +74,14 @@ public:
    *
    * @return The number of tasks currently loaded.
    */
-  size_t task_count() const;
+  size_t task_count() const noexcept;
 
   /**
    * @brief Get the path of the currently loaded file.
    *
    * @return The path of the currently loaded file, or an empty string if no file is loaded.
    */
-  std::string current_file_path() const;
+  const std::string current_file_path() const noexcept;
 
 private:
   /// Register built-in readers (CSV, JSON, ...).

@@ -33,7 +33,8 @@ bool DataManager::load_from_file(const std::string &filepath) {
 
   std::map<int, Task> tasks_map;
   for (auto &task : tasks) {
-    tasks_map.insert_or_assign(task.id, std::move(task));
+    int id = task.id;
+    tasks_map.insert_or_assign(id, std::move(task));
   }
 
   tasks_.swap(tasks_map);
@@ -52,7 +53,7 @@ ITaskReader *DataManager::select_reader(const std::string &filepath) const {
 }
 
 bool DataManager::reload_tasks() {
-  // TOOD: the filepath must be stored (filesystem, db, ...) and obtained from the storage here
+  // TODO: the filepath must be stored (filesystem, db, ...) and obtained from the storage here
   if (current_filepath_.empty()) {
     std::cerr << "No file loaded\n";
     return false;
@@ -60,6 +61,6 @@ bool DataManager::reload_tasks() {
   return load_from_file(current_filepath_);
 }
 
-size_t DataManager::task_count() const { return tasks_.size(); }
+size_t DataManager::task_count() const noexcept { return tasks_.size(); }
 
-std::string DataManager::current_file_path() const { return current_filepath_; }
+const std::string DataManager::current_file_path() const noexcept { return current_filepath_; }
