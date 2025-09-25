@@ -5,6 +5,7 @@ add_executable(taskproc_tests
     test_parser.cpp
     test_data_manager.cpp
     test_csv_reader.cpp
+    test_json_reader.cpp
 )
 
 # Link against Catch2

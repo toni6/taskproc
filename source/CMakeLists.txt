@@ -20,7 +20,7 @@ else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# Fetch fast-cpp-csv-parser (header-only)
+# Get fast-cpp-csv-parser (header-only)
 include(FetchContent)
 
 FetchContent_Declare(
@@ -31,6 +31,18 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(fastcsv)
+
+# Get nlohmann/json (header-only)
+include(FetchContent)
+
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG        v3.12.0
+    GIT_SHALLOW    ON
+)
+
+FetchContent_MakeAvailable(nlohmann_json)
 
 # Create a library with business logic
 add_library(taskproc_lib STATIC
@@ -59,6 +71,9 @@ target_include_directories(taskproc_lib PUBLIC
 target_include_directories(taskproc_lib PRIVATE
     ${fastcsv_SOURCE_DIR}
 )
+
+# Link nlohmann/json headers to taskproc_lib
+target_link_libraries(taskproc_lib PRIVATE nlohmann_json::nlohmann_json)
 
 # Main executable
 add_executable(taskproc

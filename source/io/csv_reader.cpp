@@ -36,7 +36,6 @@ std::vector<Task> CSVReader::read_tasks(const std::string &filepath) {
                  "tags");
 
   std::vector<Task> tasks;
-  tasks.reserve(128);
 
   // Variables for row data
   int id;
