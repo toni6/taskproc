@@ -55,7 +55,6 @@ std::vector<Task> CSVReader::read_tasks(const std::string &filepath) {
     }
     if (priority < 1) {
       priority = 1;
-      std::cerr << "Task " << id << ": Invalid priority, set it to 1\n";
     }
 
     tasks.emplace_back(
