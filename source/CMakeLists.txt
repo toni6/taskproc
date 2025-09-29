@@ -52,6 +52,7 @@ add_library(taskproc_lib STATIC
 
     # Core files
     core/task.hpp
+    core/view_action.hpp
     core/data_manager.hpp
     core/data_manager.cpp
 
@@ -61,6 +62,9 @@ add_library(taskproc_lib STATIC
     io/csv_reader.cpp
     io/json_reader.hpp
     io/json_reader.cpp
+    io/view_storage.hpp
+    io/view_storage.cpp
+
 )
 
 target_include_directories(taskproc_lib PUBLIC

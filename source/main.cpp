@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
     break;
   case Command::Clear:
     std::cout << "Clearing current dataset\n";
-    // TODO: Implement clear command handler
+    data_manager.reset_storage();
     break;
   default:
     // Invalid command

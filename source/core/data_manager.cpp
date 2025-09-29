@@ -1,9 +1,20 @@
 #include "core/data_manager.hpp"
+#include "../core/view_action.hpp"
 #include "io/csv_reader.hpp"
 #include "io/json_reader.hpp"
+#include "io/view_storage.hpp"
 #include <iostream>
 
-DataManager::DataManager() { register_readers(); }
+DataManager::DataManager() : storage_() {
+  register_readers();
+  try {
+    if (storage_.load_from_storage()) {
+      current_filepath_ = storage_.filepath().value_or("");
+    }
+  } catch (const std::exception &e) {
+    std::cerr << "Warning: unable to read view from storage: " << e.what() << "\n";
+  }
+}
 
 void DataManager::register_readers() {
   readers_.emplace_back(std::make_unique<CSVReader>());
@@ -17,7 +28,7 @@ bool DataManager::load_from_file(const std::string &filepath) {
     return false;
   }
 
-  std::vector<Task> tasks{};
+  std::vector<Task> tasks;
   try {
     tasks = reader->read_tasks(filepath);
   } catch (const std::exception &e) {
@@ -38,8 +49,17 @@ bool DataManager::load_from_file(const std::string &filepath) {
   }
 
   tasks_.swap(tasks_map);
-  // TODO: store the filepath in a storage (filesystem, db, ...)
   current_filepath_ = filepath;
+
+  // Store the filepath and clears previous history (set_filepath clears history)
+  try {
+    storage_.set_filepath(filepath);
+    storage_.persist();
+  } catch (const std::exception &e) {
+    std::cerr << "Warning: failed to persist view storage: " << e.what() << "\n";
+    return false;
+  }
+
   return true;
 }
 
@@ -53,14 +73,33 @@ ITaskReader *DataManager::select_reader(const std::string &filepath) const {
 }
 
 bool DataManager::reload_tasks() {
-  // TODO: the filepath must be stored (filesystem, db, ...) and obtained from the storage here
   if (current_filepath_.empty()) {
-    std::cerr << "No file loaded\n";
-    return false;
+    try {
+      if (storage_.load_from_storage()) {
+        current_filepath_ = storage_.filepath().value_or("");
+      }
+    } catch (const std::exception &e) {
+      std::cerr << "Error reading view storage: " << e.what() << "\n";
+      return false;
+    }
+    if (current_filepath_.empty()) {
+      std::cerr << "The file path is empty\n";
+      return false;
+    }
   }
-  return load_from_file(current_filepath_);
+  return true;
 }
 
 size_t DataManager::task_count() const noexcept { return tasks_.size(); }
 
 const std::string DataManager::current_file_path() const noexcept { return current_filepath_; }
+
+void DataManager::reset_storage() {
+  tasks_.clear();
+  current_filepath_.clear();
+  try {
+    storage_.clear();
+  } catch (const std::exception &e) {
+    std::cerr << "Warning: failed to clear storage: " << e.what() << "\n";
+  }
+}

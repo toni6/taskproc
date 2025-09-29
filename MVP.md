@@ -45,7 +45,6 @@ taskproc status                   # Show current dataset info (file, count, filt
 taskproc list                     # List all tasks in current dataset (formatted table)
 taskproc show <id>                # Show detailed view of specific task
 taskproc count                    # Show total task count in current view
-taskproc stats                    # Show statistics (count by status, priority distribution)
 
 # Filtering and Searching (modifies current view)
 taskproc filter <criteria>        # Filter tasks by criteria (narrows current view)
@@ -95,9 +94,13 @@ taskproc filter priority>=4
 taskproc sort due_date
 taskproc list
 
-# Check statistics
-taskproc stats
-# Output: Current view: 12 tasks (5 todo, 3 in-progress, 4 done). Average priority: 4.2
+# Check task view status
+taskproc status
+# Output:
+# Loaded 1.232 tasks from daily_tasks.csv
+# Filter: priority>=4
+# Sort: due_date
+# Current view: 12 tasks (5 todo, 3 in-progress, 4 done). Average priority: 4.2
 ```
 
 ### Scenario 2: Sprint Planning
@@ -130,7 +133,6 @@ taskproc load raw_data.csv filter status=active sort created_date export process
 # Load and explore dataset step by step
 taskproc load project_tasks.csv
 taskproc status                    # Show: "Loaded 1,245 tasks from project_tasks.csv"
-taskproc stats                     # Overview of all data
 taskproc filter status=todo        # Narrow down
 taskproc count                     # Show: "156 tasks in current view"
 taskproc sort priority desc        # Reorder
@@ -222,7 +224,9 @@ taskproc/
 │   │   ├── csv_reader.hpp
 │   │   ├── csv_reader.cpp
 │   │   ├── json_reader.hpp
-│   │   └── json_reader.cpp
+│   │   ├── json_reader.cpp
+│   │   ├── view_storage.hpp (View storage with command history)
+│   │   └── view_storage.cpp
 │   └── export/
 │       ├── exporter.hpp
 │       └── table_formatter.cpp

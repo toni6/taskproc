@@ -2,3 +2,4 @@ build/
 .cache/
 Testing/
 temp/
+.taskproc.storage

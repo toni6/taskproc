@@ -1,5 +1,6 @@
 #pragma once
 #include "../io/reader.hpp"
+#include "../io/view_storage.hpp"
 #include <map>
 #include <memory>
 #include <vector>
@@ -14,6 +15,7 @@ private:
   std::vector<std::unique_ptr<ITaskReader>> readers_;
   std::string current_filepath_;
   std::map<int, Task> tasks_;
+  ViewStorage storage_;
 
 public:
   /// Construct a DataManager and register available readers.
@@ -41,8 +43,8 @@ public:
    *       Callers holding non-owning pointers should not assume which
    *       DataManager currently owns them.
    */
-  DataManager(DataManager &&) = default;
-  DataManager &operator=(DataManager &&) = default;
+  DataManager(DataManager &&) = delete;
+  DataManager &operator=(DataManager &&) = delete;
 
   /**
    * @brief Load tasks from `filepath` and replace the manager's tasks on success.
@@ -52,9 +54,6 @@ public:
    *       equals `filepath`.
    * @post On failure: `tasks_` remains unchanged.
    * @throws std::exception (or implementation-specific exceptions) on I/O or parse errors.
-   * @note Implementations may log errors; callers should consider catching exceptions
-   *       if they want to handle failures without termination.
-   *
    * @param filepath Path to the file to load.
    * @return true if the file was successfully loaded and parsed, false otherwise.
    */
@@ -70,6 +69,22 @@ public:
   bool reload_tasks();
 
   /**
+   * @brief Apply a filter expression to the current view and record it.
+   * @pre `expr` is a valid filter expression for the engine to interpret.
+   * @post On success: the action is appended to history and persisted.
+   * @throws none (returns false if no current file is known).
+   */
+  bool apply_filter(const std::string &expr);
+
+  /**
+   * @brief Apply a sort expression to the current view and record it.
+   * @pre `expr` is a valid sort expression (e.g., "due_date desc").
+   * @post On success: the action is appended to history and persisted.
+   * @throws none (returns false if no current file is known).
+   */
+  bool apply_sort(const std::string &expr);
+
+  /**
    * @brief Get the number of tasks currently loaded.
    *
    * @return The number of tasks currently loaded.
@@ -82,6 +97,13 @@ public:
    * @return The path of the currently loaded file, or an empty string if no file is loaded.
    */
   const std::string current_file_path() const noexcept;
+
+  /**
+   * @brief Reset the storage of tasks.
+   *
+   * @post The tasks are cleared and the current file path is reset.
+   */
+  void reset_storage();
 
 private:
   /// Register built-in readers (CSV, JSON, ...).
