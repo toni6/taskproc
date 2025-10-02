@@ -15,7 +15,7 @@ std::vector<std::string> split_tags(const std::string &tags_field) {
   std::string tag;
   std::istringstream iss(tags_field);
   while (std::getline(iss, tag, ',')) {
-    tags.emplace_back(std::move(tag));
+    tags.push_back(std::move(tag));
   }
   return tags;
 }

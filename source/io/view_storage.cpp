@@ -18,7 +18,7 @@ std::optional<std::filesystem::path> ViewStorage::filepath() const noexcept {
   return current_filepath_;
 }
 
-void ViewStorage::push_action(const ViewAction action) noexcept {
+void ViewStorage::push_action(ViewAction action) noexcept {
   std::lock_guard<std::mutex> lock(mutex_);
   history_.emplace_back(std::move(action));
 }
@@ -101,10 +101,8 @@ bool ViewStorage::load_from_storage() {
   std::vector<ViewAction> history;
   if (json_data.contains("history") && json_data["history"].is_array()) {
     for (const auto &history_vc : json_data["history"]) {
-      std::string type_str = history_vc["type"].get<std::string>();
-      std::string payload = history_vc.value("payload", "");
-      if (auto type = view_op_type_from_string(type_str)) {
-        history.emplace_back(ViewAction(*type, payload));
+      if (auto type = view_op_type_from_string(history_vc["type"].get<std::string_view>())) {
+        history.emplace_back(*type, history_vc.value("payload", ""));
       }
     }
   }

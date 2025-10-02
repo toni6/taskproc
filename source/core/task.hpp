@@ -23,7 +23,7 @@ struct Task {
        std::optional<std::string> description_ = {},
        std::optional<std::string> assignee_ = {},
        std::optional<std::string> due_date_ = {},
-       std::vector<std::string> tags_ = {}) :
+       std::vector<std::string> tags_ = {}) noexcept :
       id(id_),
       title(std::move(title_)),
       status(std::move(status_)),
