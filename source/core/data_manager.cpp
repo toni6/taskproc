@@ -1,5 +1,4 @@
 #include "core/data_manager.hpp"
-#include "../core/view_action.hpp"
 #include "io/csv_reader.hpp"
 #include "io/json_reader.hpp"
 #include "io/view_storage.hpp"
