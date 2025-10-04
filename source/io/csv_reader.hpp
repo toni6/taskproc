@@ -1,7 +1,7 @@
 #pragma once
 #include "../core/task.hpp"
 #include "reader.hpp"
-#include <string>
+#include <string_view>
 #include <vector>
 
 /**
@@ -25,6 +25,6 @@
  */
 class CSVReader : public ITaskReader {
 public:
-  bool can_handle(const std::string &filepath) const override;
-  std::vector<Task> read_tasks(const std::string &filepath) override;
+  bool can_handle(std::string_view filepath) const override;
+  std::vector<Task> read_tasks(std::string_view filepath) override;
 };

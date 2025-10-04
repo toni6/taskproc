@@ -3,8 +3,10 @@
 #include "io/json_reader.hpp"
 #include "io/view_storage.hpp"
 #include <iostream>
+#include <string>
+#include <string_view>
 
-DataManager::DataManager() : storage_() {
+DataManager::DataManager() : storage_{} {
   register_readers();
   try {
     if (storage_.load_from_storage()) {
@@ -20,7 +22,7 @@ void DataManager::register_readers() {
   readers_.emplace_back(std::make_unique<JSONReader>());
 }
 
-bool DataManager::load_from_file(const std::string &filepath) {
+bool DataManager::load_from_file(std::string_view filepath) {
   ITaskReader *reader = select_reader(filepath);
   if (!reader) {
     std::cerr << "No reader found for file: " << filepath << "\n";
@@ -41,15 +43,6 @@ bool DataManager::load_from_file(const std::string &filepath) {
     return false;
   }
 
-  std::map<int, Task> tasks_map;
-  for (auto &task : tasks) {
-    int id = task.id;
-    tasks_map.insert_or_assign(id, std::move(task));
-  }
-
-  tasks_.swap(tasks_map);
-  current_filepath_ = filepath;
-
   // Store the filepath and clears previous history (set_filepath clears history)
   try {
     storage_.set_filepath(filepath);
@@ -59,11 +52,20 @@ bool DataManager::load_from_file(const std::string &filepath) {
     return false;
   }
 
+  std::map<int, Task> tasks_map;
+  for (auto &task : tasks) {
+    int id = task.id;
+    tasks_map.insert_or_assign(id, std::move(task));
+  }
+
+  tasks_.swap(tasks_map);
+  current_filepath_ = filepath;
+
   return true;
 }
 
-ITaskReader *DataManager::select_reader(const std::string &filepath) const {
-  for (auto &reader : readers_) {
+ITaskReader *DataManager::select_reader(std::string_view filepath) const {
+  for (const auto &reader : readers_) {
     if (reader->can_handle(filepath)) {
       return reader.get();
     }
@@ -86,12 +88,12 @@ bool DataManager::reload_tasks() {
       return false;
     }
   }
-  return true;
+  return load_from_file(current_filepath_);
 }
 
 size_t DataManager::task_count() const noexcept { return tasks_.size(); }
 
-const std::string DataManager::current_file_path() const noexcept { return current_filepath_; }
+std::string DataManager::current_file_path() const noexcept { return current_filepath_; }
 
 void DataManager::reset_storage() {
   tasks_.clear();

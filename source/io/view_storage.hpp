@@ -1,7 +1,6 @@
 #pragma once
 #include "../core/view_action.hpp"
 #include <filesystem>
-#include <mutex>
 #include <optional>
 #include <string>
 #include <vector>
@@ -14,17 +13,10 @@
  * path to the last-loaded tasks file and an ordered list of view-modifying
  * actions that should be replayed on top of the file to reconstruct the
  * current view.
- *
- * @note Thread-safe for simple concurrent access.
  */
 class ViewStorage {
 public:
   ViewStorage() = default;
-
-  ViewStorage(const ViewStorage &) = delete;
-  ViewStorage &operator=(const ViewStorage &) = delete;
-  ViewStorage(ViewStorage &&) = delete;
-  ViewStorage &operator=(ViewStorage &&) = delete;
 
   /**
    * @brief Set the tasks file path in memory.
@@ -33,7 +25,7 @@ public:
    * @throws none (noexcept).
    * @note Does not persist automatically; call `persist()` to save to disk.
    */
-  void set_filepath(const std::filesystem::path filepath) noexcept;
+  void set_filepath(const std::filesystem::path &filepath) noexcept;
 
   /**
    * @brief Get the current tasks filepath (if any).
@@ -41,7 +33,7 @@ public:
    * @post Returns copy of stored path or std::nullopt.
    * @throws none (noexcept).
    */
-  std::optional<std::filesystem::path> filepath() const noexcept;
+  std::optional<std::filesystem::path> filepath() const noexcept { return current_filepath_; }
 
   /**
    * @brief Add a view-modifying action to the history (in-memory).
@@ -49,7 +41,7 @@ public:
    * @post The action is appended to the in-memory history.
    * @throws none (noexcept).
    */
-  void push_action(const ViewAction action) noexcept;
+  void push_action(ViewAction action) noexcept;
 
   /**
    * @brief Return a copy of the current history.
@@ -57,7 +49,7 @@ public:
    * @post Returns vector of actions in append order (oldest first).
    * @throws none (noexcept).
    */
-  std::vector<ViewAction> history() const noexcept;
+  const std::vector<ViewAction> &history() const noexcept;
 
   /**
    * @brief Clear in-memory filepath and history.
@@ -82,7 +74,7 @@ public:
    * @post On failure: storage file is unchanged.
    * @throws std::runtime_error on I/O errors.
    */
-  void persist() const;
+  void persist();
 
   /**
    * @brief Load state from the storage file into memory.
@@ -95,11 +87,10 @@ public:
   bool load_from_storage();
 
 private:
-  mutable std::mutex mutex_;
   std::optional<std::filesystem::path> current_filepath_;
   std::vector<ViewAction> history_;
 
-  // Storage config
-  std::filesystem::path storage_dir_ = std::filesystem::current_path();
-  std::string storage_filename_ = ".taskproc.storage";
+  // Storage config (storage_dir_ is captured at contstruction time)
+  std::filesystem::path storage_dir_{std::filesystem::current_path()};
+  std::string storage_filename_{".taskproc.storage"};
 };

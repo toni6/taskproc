@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <string_view>
 #include <vector>
 
 /// Available commands
@@ -35,14 +36,14 @@ public:
    *
    * @param program_name Name of the program.
    */
-  static void print_help(const std::string &program_name);
+  static void print_help(std::string_view program_name);
 
   /**
    * Prints usage information for the program.
    *
    * @param program_name Name of the program.
    */
-  static void print_usage(const std::string &program_name);
+  static void print_usage(std::string_view program_name);
 
 private:
   /**
@@ -51,5 +52,5 @@ private:
    * @param cmd_str String representation of a command.
    * @return Command enum value corresponding to the input string.
    */
-  static Command string_to_command(const std::string &cmd_str);
+  static Command string_to_command(std::string_view cmd_str);
 };

@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  DataManager data_manager = DataManager();
+  DataManager data_manager;
 
   // Dispatch to appropriate command handler
   switch (parsed.command) {
@@ -31,9 +31,8 @@ int main(int argc, char *argv[]) {
     if (!result) {
       std::cerr << "Failed to load tasks from file: " << parsed.args[0] << "\n";
       return 1;
-    } else {
-      std::cout << "Tasks loaded successfully\n";
     }
+    std::cout << "Tasks loaded successfully\n";
     break;
   }
   case Command::Reload: {
@@ -49,7 +48,7 @@ int main(int argc, char *argv[]) {
   }
   case Command::Status:
     std::cout << "Current dataset status:\n";
-    // TOOD: Implement status command handler
+    // TODO: Implement status command handler
     break;
   case Command::Clear:
     std::cout << "Clearing current dataset\n";

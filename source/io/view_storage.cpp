@@ -1,35 +1,21 @@
 #include "io/view_storage.hpp"
-#include "core/view_action.hpp"
 #include <filesystem>
 #include <fstream>
-#include <mutex>
 #include <nlohmann/json.hpp>
+#include <system_error>
 
 using json = nlohmann::json;
 
-void ViewStorage::set_filepath(const std::filesystem::path filepath) noexcept {
-  std::lock_guard<std::mutex> lock(mutex_);
+void ViewStorage::set_filepath(const std::filesystem::path &filepath) noexcept {
   current_filepath_ = filepath;
   history_.clear();
 }
 
-std::optional<std::filesystem::path> ViewStorage::filepath() const noexcept {
-  std::lock_guard<std::mutex> lock(mutex_);
-  return current_filepath_;
-}
+void ViewStorage::push_action(ViewAction action) noexcept { history_.emplace_back(std::move(action)); }
 
-void ViewStorage::push_action(ViewAction action) noexcept {
-  std::lock_guard<std::mutex> lock(mutex_);
-  history_.emplace_back(std::move(action));
-}
-
-std::vector<ViewAction> ViewStorage::history() const noexcept {
-  std::lock_guard<std::mutex> lock(mutex_);
-  return history_;
-}
+const std::vector<ViewAction> &ViewStorage::history() const noexcept { return history_; }
 
 void ViewStorage::clear() noexcept {
-  std::lock_guard<std::mutex> lock(mutex_);
   std::filesystem::path target_path = storage_dir_ / storage_filename_;
   std::error_code ec;
   std::filesystem::remove(target_path, ec);
@@ -37,28 +23,18 @@ void ViewStorage::clear() noexcept {
   history_.clear();
 }
 
-void ViewStorage::clear_history() noexcept {
-  std::lock_guard<std::mutex> lock(mutex_);
-  history_.clear();
-}
+void ViewStorage::clear_history() noexcept { history_.clear(); }
 
-void ViewStorage::persist() const {
-  // copy under lock
-  std::optional<std::filesystem::path> filepath_copy = filepath();
-  std::vector<ViewAction> history_copy;
-  std::filesystem::path target_path;
-  {
-    std::lock_guard<std::mutex> lock(mutex_);
-    filepath_copy = current_filepath_;
-    history_copy = history_;
-    target_path = storage_dir_ / storage_filename_;
+void ViewStorage::persist() {
+  if (!current_filepath_.has_value()) {
+    throw std::runtime_error("Cannot persist: no filepath set");
   }
 
   // build JSON
   json json_data;
-  json_data["filepath"] = filepath_copy->string();
+  json_data["filepath"] = current_filepath_->string();
   json_data["history"] = json::array();
-  for (const auto &action : history_copy) {
+  for (const auto &action : history_) {
     json action_json;
     action_json["type"] = to_string(action.type);
     action_json["payload"] = action.payload;
@@ -66,6 +42,7 @@ void ViewStorage::persist() const {
   }
 
   // write JSON to file
+  std::filesystem::path target_path = storage_dir_ / storage_filename_;
   const auto tmp = target_path.string() + ".tmp";
   {
     std::ofstream ofs(tmp, std::ios::binary | std::ios::trunc);
@@ -75,15 +52,14 @@ void ViewStorage::persist() const {
   }
 
   // rename temp file to target file
-  std::filesystem::rename(tmp, target_path);
+  std::error_code ec;
+  std::filesystem::rename(tmp, target_path, ec);
+  if (ec)
+    throw std::runtime_error("Failed to commit storage file: " + ec.message());
 }
 
 bool ViewStorage::load_from_storage() {
-  std::filesystem::path target_path;
-  {
-    std::lock_guard<std::mutex> lock(mutex_);
-    target_path = storage_dir_ / storage_filename_;
-  }
+  std::filesystem::path target_path = storage_dir_ / storage_filename_;
 
   if (!std::filesystem::exists(target_path))
     return false;
@@ -107,11 +83,8 @@ bool ViewStorage::load_from_storage() {
     }
   }
 
-  {
-    std::lock_guard<std::mutex> lock(mutex_);
-    current_filepath_ = std::filesystem::path(filepath);
-    history_ = std::move(history);
-  }
+  current_filepath_ = std::filesystem::path(filepath);
+  history_ = std::move(history);
 
   return true;
 }

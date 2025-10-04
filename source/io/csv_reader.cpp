@@ -4,13 +4,13 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <vector>
 
-bool CSVReader::can_handle(const std::string &filepath) const { return filepath.ends_with(".csv"); }
-
+namespace {
 // Pre: `tags_field` is the raw tags string from CSV (no outer quotes), for example "tag1,tag2,tag3".
 // Post: returns vector of tag tokens. If `tags_field` is empty returns empty vector.
-std::vector<std::string> split_tags(const std::string &tags_field) {
+std::vector<std::string> split_tags(std::string tags_field) {
   std::vector<std::string> tags;
   std::string tag;
   std::istringstream iss(tags_field);
@@ -19,11 +19,15 @@ std::vector<std::string> split_tags(const std::string &tags_field) {
   }
   return tags;
 }
+} // anonymous namespace
 
-std::vector<Task> CSVReader::read_tasks(const std::string &filepath) {
+bool CSVReader::can_handle(std::string_view filepath) const { return filepath.ends_with(".csv"); }
+
+std::vector<Task> CSVReader::read_tasks(std::string_view filepath) {
   // Enable trimming and double-quote escaping (comma separator, double-quote as
   // quote char) Template parameters: column count, trim policy, quote policy
-  io::CSVReader<9, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '\"'>> in(filepath);
+  constexpr int CSV_COLUMNS = 9;
+  io::CSVReader<CSV_COLUMNS, io::trim_chars<' ', '\t'>, io::double_quote_escape<',', '\"'>> in{std::string(filepath)};
   in.read_header(io::ignore_extra_column,
                  "id",
                  "title",
@@ -57,8 +61,15 @@ std::vector<Task> CSVReader::read_tasks(const std::string &filepath) {
       priority = 1;
     }
 
-    tasks.emplace_back(
-        id, title, status, priority, created_date, description, assignee, due_date, split_tags(tags_field));
+    tasks.emplace_back(id,
+                       std::move(title),
+                       std::move(status),
+                       priority,
+                       std::move(created_date),
+                       std::move(description),
+                       std::move(assignee),
+                       std::move(due_date),
+                       split_tags(std::move(tags_field)));
   }
   return tasks;
 }

@@ -47,8 +47,8 @@ ParsedArgs CommandParser::parse(int argc, char *argv[]) {
   return result;
 }
 
-Command CommandParser::string_to_command(const std::string &cmd_str) {
-  static const std::unordered_map<std::string, Command> command_map = {
+Command CommandParser::string_to_command(std::string_view cmd_str) {
+  static const std::unordered_map<std::string_view, Command> command_map = {
       {"help", Command::Help},
       {"load", Command::Load},
       {"reload", Command::Reload},
@@ -64,7 +64,7 @@ Command CommandParser::string_to_command(const std::string &cmd_str) {
   return Command::Unknown;
 }
 
-void CommandParser::print_help(const std::string &program_name) {
+void CommandParser::print_help(std::string_view program_name) {
   std::cout << "TaskProc CLI - Task Processing Tool\n\n";
   std::cout << "Usage: " << program_name << " [COMMAND] [OPTIONS]\n\n";
   std::cout << "Commands:\n";
@@ -76,7 +76,7 @@ void CommandParser::print_help(const std::string &program_name) {
   std::cout << "  " << program_name << " load tasks.csv\n";
 }
 
-void CommandParser::print_usage(const std::string &program_name) {
+void CommandParser::print_usage(std::string_view program_name) {
   std::cout << "Usage: " << program_name << " [COMMAND] [OPTIONS]\n";
   std::cout << "Use '" << program_name << " help' for more information.\n";
 }

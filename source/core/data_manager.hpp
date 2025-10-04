@@ -3,6 +3,7 @@
 #include "../io/view_storage.hpp"
 #include <map>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 /**
@@ -22,31 +23,6 @@ public:
   DataManager();
 
   /**
-   * Copying is disabled because `DataManager` contains unique ownership of
-   * reader objects (`std::unique_ptr<ITaskReader>`). Attempting to copy will
-   * result in a compile-time error.
-   *
-   * @note This prevents accidental duplication of ownership.
-   */
-  DataManager(const DataManager &) = delete;
-  DataManager &operator=(const DataManager &) = delete;
-
-  /**
-   * Move semantics: ownership of readers, tasks and `current_filepath_` is
-   * transferred to the destination object.
-   *
-   * @post The moved-from object is left in a valid but unspecified state.
-   * @post Any raw, non-owning pointers previously obtained from
-   *       `select_reader()` continue to point to the same underlying reader
-   *       objects (the objects themselves are not destroyed by the move),
-   *       but those objects are now owned by the moved-to DataManager.
-   *       Callers holding non-owning pointers should not assume which
-   *       DataManager currently owns them.
-   */
-  DataManager(DataManager &&) = delete;
-  DataManager &operator=(DataManager &&) = delete;
-
-  /**
    * @brief Load tasks from `filepath` and replace the manager's tasks on success.
    *
    * @pre `filepath` is a path to a readable file and a matching reader exists.
@@ -57,7 +33,7 @@ public:
    * @param filepath Path to the file to load.
    * @return true if the file was successfully loaded and parsed, false otherwise.
    */
-  bool load_from_file(const std::string &filepath);
+  bool load_from_file(std::string_view filepath);
 
   /**
    * @brief Reload tasks from the currently loaded file.
@@ -74,7 +50,7 @@ public:
    * @post On success: the action is appended to history and persisted.
    * @throws none (returns false if no current file is known).
    */
-  bool apply_filter(const std::string &expr);
+  bool apply_filter(std::string_view expr);
 
   /**
    * @brief Apply a sort expression to the current view and record it.
@@ -82,7 +58,7 @@ public:
    * @post On success: the action is appended to history and persisted.
    * @throws none (returns false if no current file is known).
    */
-  bool apply_sort(const std::string &expr);
+  bool apply_sort(std::string_view expr);
 
   /**
    * @brief Get the number of tasks currently loaded.
@@ -96,7 +72,7 @@ public:
    *
    * @return The path of the currently loaded file, or an empty string if no file is loaded.
    */
-  const std::string current_file_path() const noexcept;
+  std::string current_file_path() const noexcept;
 
   /**
    * @brief Reset the storage of tasks.
@@ -121,5 +97,5 @@ private:
    * @param filename The name of the file to select a reader for.
    * @return A pointer to the selected reader, or nullptr if no reader is available.
    */
-  ITaskReader *select_reader(const std::string &filename) const;
+  ITaskReader *select_reader(std::string_view filename) const;
 };

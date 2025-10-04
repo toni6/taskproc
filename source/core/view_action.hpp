@@ -1,7 +1,6 @@
-#pragma once
-
 #include <optional>
 #include <string>
+#include <string_view>
 
 /**
  * @brief Domain-level view operation to be recorded and replayed.
@@ -55,7 +54,7 @@ inline std::string to_string(ViewOpType t) noexcept {
  * @pre none
  * @post Returns a matching enum if recognized, std::nullopt otherwise.
  */
-inline std::optional<ViewOpType> view_op_type_from_string(const std::string_view s) noexcept {
+inline std::optional<ViewOpType> view_op_type_from_string(std::string_view s) noexcept {
   if (s == "load")
     return ViewOpType::Load;
   if (s == "filter")

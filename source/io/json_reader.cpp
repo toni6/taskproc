@@ -3,14 +3,15 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <string_view>
 #include <vector>
 
 using json = nlohmann::json;
 
-bool JSONReader::can_handle(const std::string &filepath) const { return filepath.ends_with(".json"); }
+bool JSONReader::can_handle(std::string_view filepath) const { return filepath.ends_with(".json"); }
 
-std::vector<Task> JSONReader::read_tasks(const std::string &filepath) {
-  std::ifstream file(filepath);
+std::vector<Task> JSONReader::read_tasks(std::string_view filepath) {
+  std::ifstream file{std::string(filepath)};
   json tasks_json = json::parse(file);
 
   std::vector<Task> tasks;
