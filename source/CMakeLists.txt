@@ -16,8 +16,31 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Add compiler warnings
 if(MSVC)
     add_compile_options(/W4)
-else()
-    add_compile_options(-Wall -Wextra -Wpedantic)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_compile_options(
+        -Wall -Wextra -Wpedantic
+        -Wmost                      # Clang: enables many useful warnings
+        -Wpessimizing-move
+        -Wredundant-move
+        -Wmove
+        -Wrange-loop-analysis       # Warn about inefficient range-for loops
+        -Wsuggest-override
+        -Wnon-virtual-dtor
+        -Wold-style-cast
+        -Wunused
+        -Woverloaded-virtual
+    )
+else()  # GCC
+    add_compile_options(
+        -Wall -Wextra -Wpedantic
+        -Wpessimizing-move
+        -Wredundant-move
+        -Wsuggest-override
+        -Wnon-virtual-dtor
+        -Wold-style-cast
+        -Wunused
+        -Woverloaded-virtual
+    )
 endif()
 
 # Get fast-cpp-csv-parser (header-only)
@@ -72,7 +95,7 @@ target_include_directories(taskproc_lib PUBLIC
 )
 
 # Expose the downloaded fastcsv headers to taskproc_lib
-target_include_directories(taskproc_lib PRIVATE
+target_include_directories(taskproc_lib SYSTEM PRIVATE
     ${fastcsv_SOURCE_DIR}
 )
 
