@@ -15,6 +15,14 @@
  * current view.
  */
 class ViewStorage {
+private:
+  std::optional<std::filesystem::path> current_filepath_;
+  std::vector<ViewAction> history_;
+
+  // Storage config (storage_dir_ is captured at contstruction time)
+  std::filesystem::path storage_dir_{std::filesystem::current_path()};
+  std::string storage_filename_{".taskproc.storage"};
+
 public:
   ViewStorage() = default;
 
@@ -85,12 +93,4 @@ public:
    * @return true if a value was loaded, false if file absent.
    */
   bool load_from_storage();
-
-private:
-  std::optional<std::filesystem::path> current_filepath_;
-  std::vector<ViewAction> history_;
-
-  // Storage config (storage_dir_ is captured at contstruction time)
-  std::filesystem::path storage_dir_{std::filesystem::current_path()};
-  std::string storage_filename_{".taskproc.storage"};
 };
