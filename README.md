@@ -239,6 +239,5 @@ taskproc/
 │   └── ...
 ├── .clang
 ├── .gitignore
-├── README.md
-└── MVP.md (this file)
+└── README.md (this file)
 ```
