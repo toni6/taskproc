@@ -4,7 +4,7 @@
 #include <vector>
 
 /// Available commands
-enum class Command { Help, Load, Reload, Clear, Status, List, Unknown };
+enum class Command { Help, Load, Reload, Clear, Status, List, Filter, Sort, Unknown };
 
 /// Struct representing parsed command-line arguments
 struct ParsedArgs {

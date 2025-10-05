@@ -51,9 +51,61 @@ int main(int argc, char *argv[]) {
     // TODO: Implement status command handler
     break;
   case Command::Clear:
-    std::cout << "Clearing current dataset\n";
-    data_manager.reset_storage();
+    std::cout << "Clearing current view\n";
+    data_manager.reset_view();
     break;
+  case Command::List: {
+    const auto &view = data_manager.current_view();
+    std::cout << "Current view:\n";
+
+    if (view.empty()) {
+      std::cout << "No tasks in current view\n";
+      break;
+    }
+
+    std::cout << "Current tasks (" << view.size() << "):\n";
+    std::cout << "-------------------------\n";
+
+    for (const auto &task : view) {
+      std::cout << *task << "\n";
+    }
+
+    break;
+  }
+  case Command::Sort: {
+    std::cout << "Sorting current view\n";
+    std::string sort_expr;
+
+    if (parsed.args.empty()) {
+      sort_expr = "id asc";
+    } else {
+      sort_expr = parsed.args[0];
+      for (size_t i = 1; i < parsed.args.size(); ++i) {
+        sort_expr += " " + parsed.args[i];
+      }
+    }
+    std::cout << "Sorting tasks by: " << sort_expr << "\n";
+    bool result = data_manager.apply_sort(sort_expr);
+    if (!result) {
+      std::cerr << "Failed to sort tasks\n";
+      return 1;
+    } else {
+      std::cout << "Tasks sorted successfully\n";
+    }
+    break;
+  }
+  case Command::Filter: {
+    std::cout << "Filtering current view\n";
+    bool result = data_manager.apply_filter(parsed.args[0]);
+    if (!result) {
+      std::cerr << "Failed to filter tasks\n";
+      return 1;
+    } else {
+      std::cout << "Tasks filtered successfully\n";
+    }
+    break;
+  }
+
   default:
     // Invalid command
     break;

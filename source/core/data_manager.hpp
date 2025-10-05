@@ -1,7 +1,7 @@
 #pragma once
 #include "../io/reader.hpp"
 #include "../io/view_storage.hpp"
-#include <map>
+#include "core/database.hpp"
 #include <memory>
 #include <string_view>
 #include <vector>
@@ -15,8 +15,8 @@ class DataManager {
 private:
   std::vector<std::unique_ptr<ITaskReader>> readers_;
   std::string current_filepath_;
-  std::map<int, Task> tasks_;
   ViewStorage storage_;
+  Database database_;
 
 public:
   /// Construct a DataManager and register available readers.
@@ -35,7 +35,7 @@ public:
    */
   bool load_from_file(std::string_view filepath);
 
-  /**
+  /*
    * @brief Reload tasks from the currently loaded file.
    *
    * @pre A file was previously loaded successfully (i.e. `current_filepath_` is non-empty).
@@ -75,11 +75,24 @@ public:
   std::string current_file_path() const noexcept;
 
   /**
-   * @brief Reset the storage of tasks.
+   * @brief Get the current filtered/sorted view of tasks.
    *
-   * @post The tasks are cleared and the current file path is reset.
+   * @pre none
+   * @post Returns const reference to vector of non-owning task pointers.
+   * @throws none (noexcept).
+   * @note Returned pointers remain valid until next load() or reload() call.
+   * @note Do not store pointers beyond DataManager's lifetime.
+   *
+   * @return Const reference to vector of task pointers.
    */
-  void reset_storage();
+  const std::vector<const Task *> &current_view() const noexcept;
+
+  /**
+   * @brief Reset the view of tasks (removes filters and sorts)
+   *
+   * @post The tasks view are cleared
+   */
+  void reset_view();
 
 private:
   /// Register built-in readers (CSV, JSON, ...).

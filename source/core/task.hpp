@@ -34,3 +34,18 @@ struct Task {
       due_date(std::move(due_date_)),
       tags(std::move(tags_)) {}
 };
+
+/**
+ * @brief Stream insertion operator for Task (one-line summary format).
+ *
+ * @pre `os` is a valid output stream.
+ * @post Writes a compact task representation to the stream.
+ * @throws Whatever the underlying stream operations throw.
+ *
+ * Format: "ID: 1 | Title: Fix bug | Status: todo | Priority: 3"
+ *
+ * @param os Output stream.
+ * @param task Task to output.
+ * @return Reference to the stream (for chaining).
+ */
+std::ostream &operator<<(std::ostream &os, const Task &task);

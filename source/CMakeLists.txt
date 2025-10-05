@@ -75,9 +75,14 @@ add_library(taskproc_lib STATIC
 
     # Core files
     core/task.hpp
+    core/task.cpp
     core/view_action.hpp
     core/data_manager.hpp
     core/data_manager.cpp
+    core/database.hpp
+    core/database.cpp
+    core/expr_parser.hpp
+    core/expr_parser.cpp
 
     # IO files
     io/reader.hpp

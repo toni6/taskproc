@@ -32,6 +32,15 @@ ParsedArgs CommandParser::parse(int argc, char *argv[]) {
     }
     break;
 
+  case Command::Sort:
+    break;
+
+  case Command::Filter:
+    if (result.args.empty()) {
+      result.error_message = "command 'filter' requires a filter expression";
+    }
+    break;
+
   // Commands that don't require arguments
   case Command::Help:
   case Command::Reload:
@@ -48,14 +57,14 @@ ParsedArgs CommandParser::parse(int argc, char *argv[]) {
 }
 
 Command CommandParser::string_to_command(std::string_view cmd_str) {
-  static const std::unordered_map<std::string_view, Command> command_map = {
-      {"help", Command::Help},
-      {"load", Command::Load},
-      {"reload", Command::Reload},
-      {"clear", Command::Clear},
-      {"status", Command::Status},
-      {"list", Command::List},
-  };
+  static const std::unordered_map<std::string_view, Command> command_map = {{"help", Command::Help},
+                                                                            {"load", Command::Load},
+                                                                            {"reload", Command::Reload},
+                                                                            {"clear", Command::Clear},
+                                                                            {"status", Command::Status},
+                                                                            {"list", Command::List},
+                                                                            {"filter", Command::Filter},
+                                                                            {"sort", Command::Sort}};
 
   auto it = command_map.find(cmd_str);
   if (it != command_map.end()) {
@@ -69,11 +78,17 @@ void CommandParser::print_help(std::string_view program_name) {
   std::cout << "Usage: " << program_name << " [COMMAND] [OPTIONS]\n\n";
   std::cout << "Commands:\n";
   std::cout << "  help            Display this help message\n";
-  std::cout << "  load <file>     Load tasks from a file\n\n";
+  std::cout << "  load <file>     Load tasks from a file\n";
   std::cout << "  reload          Reload tasks from the last loaded file\n";
+  std::cout << "  list            List current task view\n";
+  std::cout << "  clear           Reset task view\n";
+  std::cout << "  sort            Sort tasks by priority\n";
+  std::cout << "  filter          Filter tasks by status\n";
 
-  std::cout << "Examples:\n";
+  std::cout << "\nExamples:\n";
   std::cout << "  " << program_name << " load tasks.csv\n";
+  std::cout << "  " << program_name << " filter status=todo\n";
+  std::cout << "  " << program_name << " sort priority desc\n";
 }
 
 void CommandParser::print_usage(std::string_view program_name) {

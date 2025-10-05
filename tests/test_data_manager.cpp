@@ -18,10 +18,6 @@ struct TempFile {
 TEST_CASE("DataManager load and reload", "[core][data_manager]") {
   DataManager dm;
 
-  // reload without load should fail after reset_storage()
-  dm.reset_storage();
-  REQUIRE(!dm.reload_tasks());
-
   SECTION("load and reload on same instance succeeds") {
     // Create a minimal CSV file the CSVReader can parse
     auto tmp_csv = std::filesystem::temp_directory_path() / "taskproc_dm_test.csv";
@@ -82,12 +78,4 @@ TEST_CASE("DataManager load and reload", "[core][data_manager]") {
     DataManager dm_new;
     REQUIRE(dm_new.reload_tasks());
   }
-}
-
-// Verify DataManager accessors reflect empty state after reset
-TEST_CASE("DataManager accessors when empty", "[core][data_manager]") {
-  DataManager dm_empty;
-  dm_empty.reset_storage();
-  REQUIRE(dm_empty.task_count() == 0);
-  REQUIRE(dm_empty.current_file_path().empty());
 }

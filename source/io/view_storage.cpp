@@ -1,6 +1,7 @@
 #include "io/view_storage.hpp"
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <nlohmann/json.hpp>
 #include <system_error>
 
@@ -23,7 +24,20 @@ void ViewStorage::clear() noexcept {
   history_.clear();
 }
 
-void ViewStorage::clear_history() noexcept { history_.clear(); }
+void ViewStorage::clear_history() noexcept {
+  history_.clear();
+
+  // Persist the cleared history to disk while keeping filepath
+  if (current_filepath_.has_value()) {
+    try {
+      persist();
+    } catch (const std::exception &e) {
+      // Log error but don't throw in noexcept function
+      // In production, use proper logging framework
+      std::cerr << "Warning: Failed to persist cleared history: " << e.what() << std::endl;
+    }
+  }
+}
 
 void ViewStorage::persist() {
   if (!current_filepath_.has_value()) {

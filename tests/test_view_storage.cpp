@@ -117,3 +117,46 @@ TEST_CASE("ViewStorage clear removes persisted file and clears memory", "[io][vi
     REQUIRE(!storage_file_exists(storage_name));
   }
 }
+
+TEST_CASE("ViewStorage clear_history preserves filepath but clears history", "[io][view_storage]") {
+  TempCwd tmp;
+  const std::string storage_name = ".taskproc.storage";
+
+  // Persist a state with filepath and history
+  {
+    ViewStorage writer;
+    writer.set_filepath("somefile.csv");
+    writer.push_action(ViewAction(ViewOpType::Filter, "priority<=2"));
+    writer.push_action(ViewAction(ViewOpType::Sort, "priority desc"));
+    writer.persist();
+    REQUIRE(storage_file_exists(storage_name));
+  }
+
+  // Load, clear history (not clear), and verify
+  {
+    ViewStorage w;
+    const bool loaded = w.load_from_storage();
+    REQUIRE(loaded);
+    REQUIRE(w.filepath().has_value());
+    REQUIRE(w.history().size() == 2);
+
+    // Clear history but keep filepath
+    w.clear_history();
+    REQUIRE(w.filepath().has_value());
+    REQUIRE(w.filepath().value() == std::filesystem::path("somefile.csv"));
+    REQUIRE(w.history().empty());
+
+    // Storage file should still exist
+    REQUIRE(storage_file_exists(storage_name));
+  }
+
+  // New instance should load filepath but no history
+  {
+    ViewStorage reader;
+    const bool loaded = reader.load_from_storage();
+    REQUIRE(loaded);
+    REQUIRE(reader.filepath().has_value());
+    REQUIRE(reader.filepath().value() == std::filesystem::path("somefile.csv"));
+    REQUIRE(reader.history().empty());
+  }
+}

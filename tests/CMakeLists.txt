@@ -8,6 +8,8 @@ add_executable(taskproc_tests
     test_json_reader.cpp
     test_view_storage.cpp
     test_ownership.cpp
+    test_database.cpp
+    test_expr_parser.cpp
 )
 
 # Link against Catch2

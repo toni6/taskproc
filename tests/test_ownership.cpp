@@ -154,24 +154,6 @@ TEST_CASE("DataManager task ownership", "[ownership][data_manager]") {
 
     // Old tasks automatically cleaned up (no manual delete needed)
   }
-
-  SECTION("reset_storage clears all owned data") {
-    auto tmp_path = std::filesystem::temp_directory_path() / "ownership_test_reset.csv";
-    TempFile tf(tmp_path);
-    create_test_csv(tmp_path);
-
-    DataManager dm;
-    REQUIRE(dm.load_from_file(tmp_path.string()));
-    REQUIRE(dm.task_count() == 2);
-    REQUIRE(!dm.current_file_path().empty());
-
-    // Reset clears everything
-    dm.reset_storage();
-    REQUIRE(dm.task_count() == 0);
-    REQUIRE(dm.current_file_path().empty());
-
-    // All resources automatically cleaned up
-  }
 }
 
 // ============================================================================
